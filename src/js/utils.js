@@ -29,4 +29,11 @@ const utils = {
   formatDate(date) {
     return new Date(date).toLocaleDateString("zh-CN");
   },
+
+  // 计算已购买天数
+  calculateDaysOwned(purchaseDate) {
+    const purchaseTime = new Date(purchaseDate).getTime();
+    const now = new Date().getTime();
+    return Math.ceil((now - purchaseTime) / (1000 * 60 * 60 * 24));
+  },
 };

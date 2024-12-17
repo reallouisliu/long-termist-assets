@@ -59,7 +59,13 @@ class AssetStore {
 
   loadAssets() {
     const stored = localStorage.getItem(STORAGE_KEY);
-    return stored ? JSON.parse(stored) : [];
+    const assets = stored ? JSON.parse(stored) : [];
+
+    // 为所有资产计算持有天数
+    return assets.map((asset) => ({
+      ...asset,
+      holdingDays: this.calculateHoldingDays(asset.purchaseDate),
+    }));
   }
 
   saveAssets() {
@@ -75,15 +81,24 @@ class AssetStore {
     return price / days;
   }
 
+  calculateHoldingDays(purchaseDate) {
+    return Math.floor(
+      (new Date() - new Date(purchaseDate)) / (1000 * 60 * 60 * 24)
+    );
+  }
+
   addAsset(asset) {
     asset.name = DOMPurify.sanitize(asset.name);
     asset.notes = DOMPurify.sanitize(asset.notes);
     asset.icon = DOMPurify.sanitize(asset.icon);
 
+    const holdingDays = this.calculateHoldingDays(asset.purchaseDate);
+
     this.assets.push({
       ...asset,
       id: Date.now(),
       dailyAverage: this.calculateDailyAverage(asset.price, asset.purchaseDate),
+      holdingDays: holdingDays,
     });
     this.saveAssets();
   }
@@ -91,12 +106,15 @@ class AssetStore {
   updateAsset(id, asset) {
     const index = this.assets.findIndex((a) => a.id === id);
     if (index !== -1) {
+      const holdingDays = this.calculateHoldingDays(asset.purchaseDate);
+
       this.assets[index] = {
         ...asset,
         dailyAverage: this.calculateDailyAverage(
           asset.price,
           asset.purchaseDate
         ),
+        holdingDays: holdingDays,
       };
       this.saveAssets();
     }
@@ -214,6 +232,7 @@ class AssetStore {
                 <p class="text-gray-600">¥${asset.dailyAverage.toFixed(
                   2
                 )}/天</p>
+                <p class="text-gray-600">已持有 ${asset.holdingDays} 天</p>
                 <p class="text-sm text-gray-500">${asset.notes}</p>
             `;
     } else {
@@ -224,7 +243,9 @@ class AssetStore {
                         <h3 class="font-semibold">${asset.name}</h3>
                         <p class="text-sm text-gray-600">¥${asset.price.toFixed(
                           2
-                        )} | ¥${asset.dailyAverage.toFixed(2)}/天</p>
+                        )} | ¥${asset.dailyAverage.toFixed(2)}/天 | ${
+        asset.holdingDays
+      }天</p>
                     </div>
                 </div>
             `;

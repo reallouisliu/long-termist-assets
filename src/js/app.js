@@ -324,7 +324,7 @@ class AssetTracker {
             </div>
           </div>
           <div class="mt-4 space-y-2">
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-2 gap-4 mb-2">
               <div class="flex items-center gap-2">
                 <span>💰</span>
                 <span>${utils.formatCurrency(asset.price)}</span>
@@ -333,11 +333,17 @@ class AssetTracker {
                 <span>📅</span>
                 <span>${utils.formatDate(asset.purchaseDate)}</span>
               </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
               <div class="flex items-center gap-2">
                 <span>⏱️</span>
                 <span>${utils.formatCurrency(
                   utils.calculateDailyAverage(asset.price, asset.purchaseDate)
                 )}/天</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span>📆</span>
+                <span>${utils.calculateDaysOwned(asset.purchaseDate)} 天</span>
               </div>
             </div>
             ${
