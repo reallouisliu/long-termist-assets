@@ -36,4 +36,22 @@ const utils = {
     const now = new Date().getTime();
     return Math.ceil((now - purchaseTime) / (1000 * 60 * 60 * 24));
   },
+
+  // 格式化已购买天数
+  formatDaysOwned(days) {
+    if (days < 30) {
+      return `${days} 天`;
+    } else if (days < 365) {
+      const months = Math.floor(days / 30);
+      const remainingDays = days % 30;
+      return remainingDays > 0
+        ? `${months} 个月 ${remainingDays} 天`
+        : `${months} 个月`;
+    } else {
+      const years = Math.floor(days / 365);
+      const remainingDays = days % 365;
+      const months = Math.floor(remainingDays / 30);
+      return months > 0 ? `${years} 年 ${months} 个月` : `${years} 年`;
+    }
+  },
 };

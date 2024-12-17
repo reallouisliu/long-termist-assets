@@ -355,7 +355,9 @@ class AssetTracker {
               </div>
               <div class="flex items-center gap-2">
                 <span>📆</span>
-                <span>${utils.calculateDaysOwned(asset.purchaseDate)} 天</span>
+                <span>${utils.formatDaysOwned(
+                  utils.calculateDaysOwned(asset.purchaseDate)
+                )}</span>
               </div>
             </div>
             ${
@@ -450,7 +452,7 @@ class AssetTracker {
               }
             } catch (error) {
               console.error("数据解析错误:", error);
-              alert("导入失败：数据格式不���确");
+              alert("导入失败：数据格式不正确");
             }
           };
           reader.readAsText(file);
