@@ -1,0 +1,327 @@
+:root {
+    --primary: #0f172a;
+    --background: #f8fafc;
+    --card: #ffffff;
+    --text: #0f172a;
+    --text-secondary: #64748b;
+    --border: #e2e8f0;
+}
+
+[data-theme="dark"] {
+    --primary: #e2e8f0;
+    --background: #0f172a;
+    --card: #1e293b;
+    --text: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border: #334155;
+}
+
+body {
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+    transition: background-color 0.3s, color 0.3s;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.stat-card {
+    background-color: var(--card);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border: 1px solid var(--border);
+}
+
+.stat-card h3 {
+    color: var(--text-secondary);
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-card p {
+    color: var(--text);
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.btn-primary {
+    background-color: var(--primary);
+    color: var(--background);
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: opacity 0.2s;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-secondary {
+    background-color: var(--card);
+    color: var(--text);
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.2s;
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+
+.btn-secondary:hover {
+    background-color: var(--border);
+}
+
+.filter-btn {
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    background-color: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filter-btn.active {
+    background-color: var(--primary);
+    color: var(--background);
+    border-color: var(--primary);
+}
+
+.view-btn {
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    background-color: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.view-btn.active {
+    background-color: var(--primary);
+    color: var(--background);
+    border-color: var(--primary);
+}
+
+.asset-card {
+    background-color: var(--card);
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.asset-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.asset-card .action-buttons {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+    position: absolute;
+    right: 1.25rem;
+    top: 1.25rem;
+}
+
+.asset-card:hover .action-buttons {
+    opacity: 1;
+}
+
+.asset-list-item {
+    background-color: var(--card);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--card);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border: 1px solid var(--border);
+}
+
+.form-group {
+    margin-bottom: 1.25rem;
+}
+
+.form-group label {
+    display: block;
+    color: var(--text-secondary);
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    background-color: var(--background);
+    color: var(--text);
+    transition: border-color 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+.icon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+    gap: 0.5rem;
+    padding: 1rem;
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.icon-option {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition: background-color 0.2s;
+}
+
+.icon-option:hover {
+    background-color: #f3f4f6;
+}
+
+.icon-option.selected {
+    background-color: var(--primary);
+    color: var(--background);
+    border-color: var(--primary);
+}
+
+.settings-panel {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 0.75rem;
+    }
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    #assets-container {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-btn, .view-btn {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+    }
+
+    .modal-content {
+        padding: 1rem;
+        margin: 0.5rem;
+    }
+
+    .settings-panel {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0;
+        background-color: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+        min-width: 160px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        z-index: 100;
+    }
+
+    .settings-panel.show {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .settings-panel .btn-secondary {
+        justify-content: flex-start;
+        text-align: left;
+        padding: 0.5rem 0.75rem;
+    }
+
+    .settings-panel .btn-secondary:hover {
+        background-color: var(--border);
+    }
+
+    #mobile-menu-trigger {
+        z-index: 101;
+    }
+
+    .asset-card .action-buttons {
+        opacity: 1;
+        position: static;
+    }
+}
+
+@media (min-width: 769px) {
+    .settings-panel {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    .settings-panel .btn-secondary {
+        width: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .filters {
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+
+    .filters .flex {
+        width: max-content;
+    }
+}

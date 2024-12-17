@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>长期主义资产统计</title>
+    <meta
+      name="description"
+      content="长期主义资产统计工具 - 追踪和分析您的资产价值"
+    />
+    <link rel="manifest" href="manifest.json" />
+    <link href="./styles.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@radix-ui/themes@2.0.0/styles.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.6/dist/purify.min.js"></script>
+  </head>
+  <body class="bg-gray-50 dark:bg-gray-900">
+    <div id="app" class="container mx-auto px-4 py-8">
+      <header class="mb-8">
+        <div class="flex justify-between items-center">
+          <h1
+            class="text-3xl font-bold text-gray-900 dark:text-white"
+            data-i18n="title"
+          >
+            长期主义资产统计
+          </h1>
+          <!-- 移动端菜单按钮 -->
+          <div class="relative">
+            <button
+              id="mobile-menu-trigger"
+              class="md:hidden btn-secondary p-2"
+              aria-label="设置菜单"
+            >
+              <svg
+                class="w-5 h-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
+              </svg>
+            </button>
+            <!-- 设置面板 -->
+            <div class="settings-panel">
+              <button
+                id="theme-toggle"
+                class="btn-secondary w-full flex items-center gap-2"
+              >
+                <span>🌓</span>
+                <span class="md:hidden">切换主题</span>
+              </button>
+              <button
+                id="language-toggle"
+                class="btn-secondary w-full flex items-center gap-2"
+              >
+                <span>🌐</span>
+                <span class="md:hidden">切换语言</span>
+              </button>
+              <button
+                id="import-data"
+                class="btn-secondary w-full flex items-center gap-2"
+                data-i18n="import"
+              >
+                <span>📥</span>
+                <span class="md:hidden">导入数据</span>
+              </button>
+              <button
+                id="export-data"
+                class="btn-secondary w-full flex items-center gap-2"
+                data-i18n="export"
+              >
+                <span>📤</span>
+                <span class="md:hidden">导出数据</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="mt-8">
+          <div class="stats grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="stat-card">
+              <h3 data-i18n="totalAssets">资产总量</h3>
+              <p id="total-assets">¥0.00</p>
+            </div>
+            <div class="stat-card">
+              <h3 data-i18n="totalCount">总数量</h3>
+              <p id="total-count">0</p>
+            </div>
+            <div class="stat-card">
+              <h3 data-i18n="totalDaily">总日均</h3>
+              <p id="total-daily">¥0.00/天</p>
+            </div>
+          </div>
+          <button id="add-asset" class="btn-primary mt-4" data-i18n="addAsset">
+            添加资产
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <div class="filters mb-6">
+          <div class="flex gap-4">
+            <button class="filter-btn active" data-filter="all" data-i18n="all">
+              全部
+            </button>
+            <button class="filter-btn" data-filter="active" data-i18n="active">
+              正在使用
+            </button>
+            <button
+              class="filter-btn"
+              data-filter="retired"
+              data-i18n="retired"
+            >
+              已停用
+            </button>
+            <button
+              class="filter-btn"
+              data-filter="collection"
+              data-i18n="collection"
+            >
+              收藏
+            </button>
+          </div>
+        </div>
+
+        <div class="view-toggle mb-4">
+          <button id="card-view" class="view-btn active" data-i18n="cardView">
+            卡片视图
+          </button>
+          <button id="list-view" class="view-btn" data-i18n="listView">
+            列表视图
+          </button>
+        </div>
+
+        <div
+          id="assets-container"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        >
+          <!-- Assets will be dynamically inserted here -->
+        </div>
+      </main>
+
+      <!-- Asset Modal -->
+      <div id="asset-modal" class="modal hidden">
+        <div class="modal-content">
+          <form id="asset-form" class="space-y-4">
+            <div class="form-group">
+              <label for="asset-icon">图标</label>
+              <input
+                type="text"
+                id="asset-icon"
+                name="asset-icon"
+                class="form-input"
+                required
+              />
+              <div class="icon-grid">
+                <!-- 电子产品 -->
+                <div class="icon-option" data-icon="📱">📱</div>
+                <div class="icon-option" data-icon="💻">💻</div>
+                <div class="icon-option" data-icon="⌚️">⌚️</div>
+                <div class="icon-option" data-icon="🖥️">🖥️</div>
+                <div class="icon-option" data-icon="⌨️">⌨️</div>
+                <div class="icon-option" data-icon="🖱️">🖱️</div>
+                <div class="icon-option" data-icon="🎧">🎧</div>
+                <div class="icon-option" data-icon="📷">📷</div>
+                <div class="icon-option" data-icon="🎮">🎮</div>
+                <!-- 家用电器 -->
+                <div class="icon-option" data-icon="📺">📺</div>
+                <div class="icon-option" data-icon="❄️">❄️</div>
+                <div class="icon-option" data-icon="🌡️">🌡️</div>
+                <div class="icon-option" data-icon="💡">💡</div>
+                <div class="icon-option" data-icon="🔋">🔋</div>
+                <!-- 家具 -->
+                <div class="icon-option" data-icon="🛋️">🛋️</div>
+                <div class="icon-option" data-icon="🛏️">🛏️</div>
+                <div class="icon-option" data-icon="🪑">🪑</div>
+                <div class="icon-option" data-icon="🚪">🚪</div>
+                <!-- 交通工具 -->
+                <div class="icon-option" data-icon="🚗">🚗</div>
+                <div class="icon-option" data-icon="🚲">🚲</div>
+                <div class="icon-option" data-icon="🛵">🛵</div>
+                <!-- 其他 -->
+                <div class="icon-option" data-icon="📚">📚</div>
+                <div class="icon-option" data-icon="⌚">⌚</div>
+                <div class="icon-option" data-icon="👕">👕</div>
+                <div class="icon-option" data-icon="👜">👜</div>
+                <div class="icon-option" data-icon="💍">💍</div>
+                <div class="icon-option" data-icon="🎨">🎨</div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="asset-name">名称</label>
+              <input
+                type="text"
+                id="asset-name"
+                name="asset-name"
+                class="form-input"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="asset-price">价格</label>
+              <input
+                type="number"
+                id="asset-price"
+                name="asset-price"
+                step="0.01"
+                class="form-input"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="purchase-date">购买日期</label>
+              <input
+                type="date"
+                id="purchase-date"
+                name="purchase-date"
+                class="form-input"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label class="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="is-active"
+                  name="is-active"
+                  class="form-checkbox"
+                />
+                <span>正在使用</span>
+              </label>
+            </div>
+            <div class="form-group">
+              <label class="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="is-collection"
+                  name="is-collection"
+                  class="form-checkbox"
+                />
+                <span>收藏</span>
+              </label>
+            </div>
+            <div class="form-group">
+              <label for="asset-notes">备注</label>
+              <textarea
+                id="asset-notes"
+                name="asset-notes"
+                class="form-input"
+                rows="3"
+              ></textarea>
+            </div>
+            <div class="flex justify-end gap-2">
+              <button type="button" id="close-modal" class="btn-secondary">
+                取消
+              </button>
+              <button type="submit" class="btn-primary">保存</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <input type="file" id="import-file" accept=".json" class="hidden" />
+
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
