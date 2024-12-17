@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>长期主义资产统计</title>
+    <link rel="manifest" href="manifest.json" />
+    <link rel="stylesheet" href="assets/styles/main.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-background text-foreground">
+    <header class="p-6 border-b border-border-color">
+      <div class="container mx-auto">
+        <div class="flex justify-between items-center">
+          <h1 class="text-3xl font-bold">长期主义资产统计</h1>
+          <div class="flex items-center gap-2 md:gap-4">
+            <button id="themeToggle" class="icon-btn" title="切换主题">
+              🌓
+            </button>
+            <div class="flex items-center gap-2 border-l border-r px-4">
+              <button id="exportData" class="icon-btn" title="导出数据">
+                💾
+              </button>
+              <button id="importData" class="icon-btn" title="导入数据">
+                📂
+              </button>
+            </div>
+            <button id="addAsset" class="btn-primary">
+              <span>➕</span>
+              <span class="hidden md:inline">添加资产</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mx-auto p-6">
+      <section
+        id="statistics"
+        class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8"
+      >
+        <!-- 统计卡片将通过 JavaScript 动态生成 -->
+      </section>
+
+      <section id="assetList" class="space-y-6">
+        <div
+          class="flex flex-col md:flex-row md:justify-between md:items-center gap-4"
+        >
+          <div class="flex flex-col md:flex-row md:items-center gap-4">
+            <h2 class="text-2xl font-semibold">📝 资产列表</h2>
+            <div class="flex flex-wrap gap-2">
+              <button class="tab-btn active">全部</button>
+              <button class="tab-btn">使用中</button>
+              <button class="tab-btn">已停用</button>
+              <button class="tab-btn">收藏</button>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <input
+              type="text"
+              placeholder="搜索资产..."
+              class="search-input w-full md:w-auto"
+            />
+          </div>
+        </div>
+        <div
+          id="assetGrid"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          <!-- 资产卡片将通过 JavaScript 动态生成 -->
+        </div>
+      </section>
+    </main>
+
+    <script src="src/js/constants.js"></script>
+    <script src="src/js/utils.js"></script>
+    <script src="src/js/storage.js"></script>
+    <script src="src/js/i18n.js"></script>
+    <script src="src/js/app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+assets/
+├── icons/
+├── styles/
+│   ├── main.css
+│   └── themes/
+src/
+├── js/
+│   ├── app.js
+│   ├── constants.js
+│   ├── storage.js
+│   ├── utils.js
+│   └── i18n.js
+index.html
+manifest.json
+sw.js 
