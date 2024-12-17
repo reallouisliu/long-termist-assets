@@ -252,9 +252,21 @@ class AssetTracker {
   }
 
   loadAssets() {
-    const assets = this.storage.getAllAssets();
-    this.updateStatistics(assets);
-    this.renderAssetGrid(assets);
+    try {
+      const assets = this.storage.getAllAssets();
+      if (Array.isArray(assets)) {
+        this.updateStatistics(assets);
+        this.renderAssetGrid(assets);
+      } else {
+        console.error("加载的资产数据格式不正��");
+        this.updateStatistics([]);
+        this.renderAssetGrid([]);
+      }
+    } catch (error) {
+      console.error("加载资产失败:", error);
+      this.updateStatistics([]);
+      this.renderAssetGrid([]);
+    }
   }
 
   updateStatistics(assets) {
@@ -377,20 +389,32 @@ class AssetTracker {
 
   deleteAsset(id) {
     if (confirm("确认删除该资产？")) {
-      const assets = this.storage
-        .getAllAssets()
-        .filter((asset) => asset.id !== id);
-      this.storage.saveAssets(assets);
-      this.loadAssets();
+      try {
+        const assets = this.storage
+          .getAllAssets()
+          .filter((asset) => asset.id !== id);
+        this.storage.saveAssets(assets);
+        this.loadAssets();
+      } catch (error) {
+        console.error("删除资产失败:", error);
+        alert("删除资产失败");
+      }
     }
   }
 
   updateAsset(assetData) {
-    const assets = this.storage.getAllAssets();
-    const index = assets.findIndex((a) => a.id === assetData.id);
-    if (index !== -1) {
-      assets[index] = { ...assets[index], ...assetData };
-      this.storage.saveAssets(assets);
+    try {
+      const assets = this.storage.getAllAssets();
+      const index = assets.findIndex((a) => a.id === assetData.id);
+      if (index !== -1) {
+        assets[index] = { ...assets[index], ...assetData };
+        this.storage.saveAssets(assets);
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("更新资产失败:", error);
+      return false;
     }
   }
 
@@ -409,12 +433,30 @@ class AssetTracker {
     input.onchange = async (e) => {
       const file = e.target.files[0];
       if (file) {
-        const success = await this.storage.importData(file);
-        if (success) {
-          this.loadAssets();
-          alert("数据导入成功");
-        } else {
-          alert("数据导入失败");
+        try {
+          const reader = new FileReader();
+          reader.onload = async (event) => {
+            try {
+              const jsonData = JSON.parse(event.target.result);
+              // 验证导入的数据格式
+              if (Array.isArray(jsonData)) {
+                // 保存导入的数据
+                this.storage.saveAssets(jsonData);
+                // 重新加载资产列表
+                this.loadAssets();
+                alert("数据导入成功");
+              } else {
+                throw new Error("导入的数据格式不正确");
+              }
+            } catch (error) {
+              console.error("数据解析错误:", error);
+              alert("导入失败：数据格式不���确");
+            }
+          };
+          reader.readAsText(file);
+        } catch (error) {
+          console.error("文件读取错误:", error);
+          alert("导入失败：文件读取错误");
         }
       }
     };
