@@ -91,9 +91,13 @@ class AssetTracker {
           </div>
           <div class="mt-4 flex items-center gap-2">
             <span>已选图标：</span>
-            <span id="selectedEmoji" class="text-2xl min-w-[2rem] text-center">${
-              asset?.icon || "📦"
-            }</span>
+            <input 
+              type="text" 
+              id="selectedEmoji" 
+              class="text-2xl min-w-[2rem] text-center p-2 border rounded-lg focus:ring-2 focus:ring-primary"
+              value="${asset?.icon || "📦"}"
+              maxlength="2"
+            >
           </div>
         </div>
         <div class="p-6 overflow-y-auto custom-scrollbar">
@@ -221,17 +225,18 @@ class AssetTracker {
         e.target
           .closest("label")
           .classList.add("border-primary", "bg-primary", "bg-opacity-10");
-        // 更新已选图标显示
+        // 更新已选图标输入框
         const selectedEmoji = form.querySelector("#selectedEmoji");
-        selectedEmoji.textContent = e.target.value;
+        selectedEmoji.value = e.target.value;
       });
     });
 
     form.querySelector("#assetForm").addEventListener("submit", (e) => {
       e.preventDefault();
       const formData = new FormData(e.target);
+      const selectedEmoji = form.querySelector("#selectedEmoji").value;
       const assetData = {
-        icon: formData.get("icon"),
+        icon: selectedEmoji || "📦", // 使用输入框的值
         name: formData.get("name"),
         price: Number(formData.get("price")),
         purchaseDate: formData.get("purchaseDate"),
@@ -258,7 +263,7 @@ class AssetTracker {
         this.updateStatistics(assets);
         this.renderAssetGrid(assets);
       } else {
-        console.error("加载的资产数据格式不正��");
+        console.error("加载的资产数据格式不正确");
         this.updateStatistics([]);
         this.renderAssetGrid([]);
       }
@@ -457,7 +462,7 @@ class AssetTracker {
           };
           reader.readAsText(file);
         } catch (error) {
-          console.error("文件读取错误:", error);
+          console.error("文件读取��误:", error);
           alert("导入失败：文件读取错误");
         }
       }
